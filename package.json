@@ -1,19 +1,25 @@
 {
   "name": "ttb-node-nfc",
-  "version": "0.0.3",
-  "description": "This node alow you to use eff'innov's nfc dongle ",
+  "version": "1.0.1",
+  "description": "This node for TheThingbox NFC dongle",
   "dependencies": {
     "serialport": "4.0.7"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheThingBox/ttb-node-nfc.git"
+  },
+  "keywords": [
+    "thingbox",
+    "thethingbox",
+    "timesquair",
+    "NFC"
+  ],
   "node-red": {
       "nodes": {
           "nfc": "nfc.js"
       }
   },
-  "keywords": [
-    "node-red",
-    "nfc"
-  ],
-  "author": "http://www.digitalairways.com/",
+  "author": "Digital Airways (http://www.digitalairways.com/)",
   "license": "http://www.wtfpl.net"
 }
