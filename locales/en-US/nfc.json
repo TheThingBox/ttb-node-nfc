@@ -1,0 +1,6 @@
+{
+    "nfc": {
+        "name": "Name",
+        "idonly": "send the NFC id only"
+    }
+}

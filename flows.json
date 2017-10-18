@@ -1,0 +1,338 @@
+[
+    {
+        "id": "NFCManager",
+        "type": "tab",
+        "label": "NFC Manager"
+    },
+    {
+        "id": "1b3b47e1.fe63e8",
+        "type": "nfc",
+        "z": "NFCManager",
+        "name": "",
+        "idonly": true,
+        "x": 210,
+        "y": 60,
+        "wires": [
+            [
+                "79895c3b.8676a4"
+            ]
+        ]
+    },
+    {
+        "id": "79895c3b.8676a4",
+        "type": "function",
+        "z": "NFCManager",
+        "name": "",
+        "func": "if(!msg.payload){\n    return null;\n}\n\nmsg.tagid = msg.payload ;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 350,
+        "y": 60,
+        "wires": [
+            [
+                "ef1475b2.5ffe08"
+            ]
+        ]
+    },
+    {
+        "id": "f8769492.d71128",
+        "type": "exec",
+        "z": "NFCManager",
+        "command": "curl --head ",
+        "addpay": true,
+        "append": "",
+        "useSpawn": "",
+        "timer": "",
+        "name": "curl -H",
+        "x": 350,
+        "y": 180,
+        "wires": [
+            [
+                "af94a544.03ac48"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "af94a544.03ac48",
+        "type": "function",
+        "z": "NFCManager",
+        "name": "extract infos",
+        "func": "var error = \"Could not resolve host\"\ntry {\n    msg.payload = msg.payload.replace(/\\n/g,\" \").replace(/\\r/g,\" \").trim();\n} catch(e) {\n    msg.payload = error;\n}\nif (msg.payload.indexOf(error) == -1){\n    return [null, msg]\n}\nelse {\n    return [msg, null]\n}",
+        "outputs": "2",
+        "noerr": 0,
+        "x": 510,
+        "y": 180,
+        "wires": [
+            [
+                "6f739ca1.0a9aa4"
+            ],
+            [
+                "6fa14aff.905eb4"
+            ]
+        ]
+    },
+    {
+        "id": "7697d3a0.89682c",
+        "type": "function",
+        "z": "NFCManager",
+        "name": "",
+        "func": "msg.topic =  \"smartcard/msgread/\" + msg.tagid;\nmsg.payload = msg.tagid;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 210,
+        "y": 280,
+        "wires": [
+            [
+                "7b2d3871.84d2c8",
+                "84173951.7be8c8"
+            ]
+        ]
+    },
+    {
+        "id": "6fa14aff.905eb4",
+        "type": "http request",
+        "z": "NFCManager",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "url": "",
+        "x": 730,
+        "y": 200,
+        "wires": [
+            [
+                "1692eb48.e96d15"
+            ]
+        ]
+    },
+    {
+        "id": "1692eb48.e96d15",
+        "type": "function",
+        "z": "NFCManager",
+        "name": "",
+        "func": "if (msg.payload == \"\"){\n    return [msg , null];\n}\nreturn [null, msg];",
+        "outputs": "2",
+        "noerr": 0,
+        "x": 890,
+        "y": 200,
+        "wires": [
+            [
+                "95ce6191.bcb48"
+            ],
+            [
+                "f3fbab33.0c0458"
+            ]
+        ]
+    },
+    {
+        "id": "7b2d3871.84d2c8",
+        "type": "mqtt out",
+        "z": "NFCManager",
+        "name": "",
+        "topic": "",
+        "qos": "0",
+        "retain": "",
+        "broker": "MQTT.Localhost",
+        "x": 350,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "84173951.7be8c8",
+        "type": "template",
+        "z": "NFCManager",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{\n    \"generateKey\": \"{{tagid}}\",\n    \"type\": \"mqtt in\",\n    \"name\": \"NFC {{tagid}}\",\n    \"topic\": \"smartcard/msgread/{{tagid}}\",\n    \"broker\": \"MQTT.Localhost\",\n    \"qos\": \"0\"\n}",
+        "x": 350,
+        "y": 300,
+        "wires": [
+            [
+                "4f0172cc.b0fe8c"
+            ]
+        ]
+    },
+    {
+        "id": "f3fbab33.0c0458",
+        "type": "mqtt out",
+        "z": "NFCManager",
+        "name": "",
+        "topic": "tagreader/message",
+        "qos": "0",
+        "retain": "",
+        "broker": "MQTT.Localhost",
+        "x": 1070,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "4f0172cc.b0fe8c",
+        "type": "json",
+        "z": "NFCManager",
+        "name": "",
+        "x": 490,
+        "y": 300,
+        "wires": [
+            [
+                "5cc5f601.a33a08"
+            ]
+        ]
+    },
+    {
+        "id": "5cc5f601.a33a08",
+        "type": "nodefactory",
+        "z": "NFCManager",
+        "name": "",
+        "x": 740,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ef1475b2.5ffe08",
+        "type": "function",
+        "z": "NFCManager",
+        "name": "check.theregister",
+        "func": "msg.useTheregister = false;\nreturn msg;",
+        "outputs": "1",
+        "noerr": 0,
+        "x": 530,
+        "y": 60,
+        "wires": [
+            [
+                "2aea99d8.873696"
+            ]
+        ]
+    },
+    {
+        "id": "2aea99d8.873696",
+        "type": "switch",
+        "z": "NFCManager",
+        "name": "",
+        "property": "useTheregister",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "false"
+            },
+            {
+                "t": "true"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 710,
+        "y": 60,
+        "wires": [
+            [
+                "f59be733.4e2118"
+            ],
+            [
+                "198d7673.f8dc3a"
+            ]
+        ]
+    },
+    {
+        "id": "d152a63c.0757a8",
+        "type": "function",
+        "z": "NFCManager",
+        "name": "",
+        "func": "\nmsg.url = \"http://api.timesquair.io/api/theregister/get?var=\"+msg.tagid;\nmsg.payload = \"http://api.timesquair.io 2>&1\"\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 210,
+        "y": 180,
+        "wires": [
+            [
+                "f8769492.d71128"
+            ]
+        ]
+    },
+    {
+        "id": "a2fa58cb.5a1c18",
+        "type": "link in",
+        "z": "NFCManager",
+        "name": "theregister",
+        "links": [
+            "198d7673.f8dc3a"
+        ],
+        "x": 115,
+        "y": 180,
+        "wires": [
+            [
+                "d152a63c.0757a8"
+            ]
+        ]
+    },
+    {
+        "id": "6f739ca1.0a9aa4",
+        "type": "link out",
+        "z": "NFCManager",
+        "name": "",
+        "links": [
+            "3f379c58.5504b4"
+        ],
+        "x": 675,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "3f379c58.5504b4",
+        "type": "link in",
+        "z": "NFCManager",
+        "name": "process nfc",
+        "links": [
+            "6f739ca1.0a9aa4",
+            "95ce6191.bcb48",
+            "f59be733.4e2118"
+        ],
+        "x": 115,
+        "y": 280,
+        "wires": [
+            [
+                "7697d3a0.89682c"
+            ]
+        ]
+    },
+    {
+        "id": "95ce6191.bcb48",
+        "type": "link out",
+        "z": "NFCManager",
+        "name": "",
+        "links": [
+            "3f379c58.5504b4"
+        ],
+        "x": 995,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "f59be733.4e2118",
+        "type": "link out",
+        "z": "NFCManager",
+        "name": "",
+        "links": [
+            "3f379c58.5504b4"
+        ],
+        "x": 855,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "198d7673.f8dc3a",
+        "type": "link out",
+        "z": "NFCManager",
+        "name": "",
+        "links": [
+            "a2fa58cb.5a1c18"
+        ],
+        "x": 855,
+        "y": 80,
+        "wires": []
+    }
+]

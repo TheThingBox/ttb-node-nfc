@@ -1,0 +1,33 @@
+<script type="text/x-red" data-template-name="nfc">
+    <div class="form-row">
+        <span>&nbsp;</span>
+        <input type="checkbox" id="node-input-idonly" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-idonly" style="width: 70%;" data-i18n="nfc.idonly"></label>
+    </div>
+	<div class="form-row">
+		<label for="node-input-name"><i class="icon-tag"></i> <span data-i18n="nfc.name"></span></label>
+		<input type="text" id="node-input-name">
+	</div>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType("nfc", {
+        category: "basic",
+        color: "#fff",
+        defaults: {
+			name: {value: ""},
+            idonly: {value: ""}
+        },
+        inputs:1,
+        outputs:1,
+		icon: "nfc.png",
+        align: "right",
+		paletteLabel: "NFC",
+        label: function() {
+            return this.name || "NFC";
+        },
+        labelStyle: function() {
+            return this.name ? "node_label_italic" : "";
+        }
+	});
+</script>
